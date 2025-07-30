@@ -3,10 +3,12 @@ const sortTittle = document.querySelector(".container .tittle");
 const generateButton = document.getElementById("generateBars");
 const startButton = document.getElementById("startSort");
 const barCountInput = document.getElementById("barCount");
+const barSpeedInput = document.getElementById("barSpeed")
 
 const array= [];
 
-let n = parseInt(barCountInput.value, 10) || 120;
+let numBars = parseInt(barCountInput.value, 10);
+let speedBars = parseInt(barCountInput.value, 10);
 let selectedSort = "Bubble";
 let barElements = [];
 
@@ -28,21 +30,28 @@ barCountInput.addEventListener("change", () => {
     generateBars();
 });
 
+barSpeedInput.addEventListener("change", () => {
+    speedBars = parseInt(barSpeedInput.value, 10);
+    if (isNaN(speedBars) || speedBars < 1) speedBars = 1;
+    if (speedBars > 1000) speedBars = 1000;
+    barSpeedInput.value = speedBars;
+});
+
 
 
 function generateBars() {
     wrapper.innerHTML = "";
     barElements = [];
 
-    n = parseInt(barCountInput.value, 10);
-    if (isNaN(n) || n < 10) n = 10;
-    if (n > 150) n = 150;
-    barCountInput.value = n;
+    numBars = parseInt(barCountInput.value, 10);
+    if (isNaN(numBars) || numBars < 10) numBars = 10;
+    if (numBars > 150) numBars = 150;
+    barCountInput.value = numBars;
 
     array.length = 0;
     barElements.length = 0;
 
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < numBars; i++) {
         array[i] = Math.random();
     }
 
@@ -60,6 +69,7 @@ function generateBars() {
 function sort() {
     startButton.disabled = true;
     generateButton.disabled = true;
+    barCountInput.disabled = true;
     if (selectedSort == "Bubble") {
         bubbleSort();
     } else if (selectedSort == "Quick") {
@@ -74,12 +84,12 @@ async function bubbleSort() {
         for (let j = 0; j < array.length - i - 1; j++) {
             barElements[j].style.background = "red";
             barElements[j + 1].style.background = "red";
-            await sleep(5);
+            await sleep(speedBars);
             if (array[j] > array[j + 1]) {
                 [array[j], array[j + 1]] = [array[j + 1], array[j]];
                 swapBars(j, j + 1);
             }
-            await sleep(5);
+            await sleep(speedBars);
             barElements[j].style.background = "black";
             barElements[j + 1].style.background = "black";
         }
@@ -89,6 +99,7 @@ async function bubbleSort() {
         barElements[i].style.background = "green";
     }
     generateButton.disabled = false;
+    barCountInput.disabled = false;
 }
 
 async function quickSort() {
@@ -96,10 +107,11 @@ async function quickSort() {
 
     for (let i = 0; i < array.length; i++) {
         barElements[i].style.background = "green";
-        await sleep(5);
+        await sleep(speedBars);
     }
 
     generateButton.disabled = false;
+    barCountInput.disabled = false;
 }
 
 
@@ -124,7 +136,7 @@ async function partition(low, high) {
     for (let j = low; j < high; j++) {
         barElements[j].style.background = "red";
         barElements[high].style.background = "red"; 
-        await sleep(20);
+        await sleep(speedBars);
         if (array[j] < pivotValue) {
             i++;
             [array[i], array[j]] = [array[j], array[i]];
@@ -137,7 +149,7 @@ async function partition(low, high) {
     [array[i + 1], array[high]] = [array[high], array[i + 1]];
     swapBars(i + 1, high);
     barElements[i + 1].style.background = "black";
-    await sleep(20);
+    await sleep(speedBars);
     return i + 1;
 }
 
@@ -147,11 +159,12 @@ async function mergeSort() {
     await mergeSortHelper(0, array.length - 1);
 
     for (let i = 0; i < array.length; i++) {
+        await sleep(1);
         barElements[i].style.background = "green";
-        await sleep(5);
     }
 
     generateButton.disabled = false;
+    barCountInput.disabled = false;
 }
 
 async function mergeSortHelper(start, end) {
@@ -172,7 +185,7 @@ async function merge(start, mid, end) {
         barElements[leftIndex].style.background = "red";
         barElements[rightIndex].style.background = "red";
 
-        await sleep(20);
+        await sleep(speedBars);
 
         if (array[leftIndex] <= array[rightIndex]) {
             temp.push(array[leftIndex]);
@@ -203,7 +216,7 @@ async function merge(start, mid, end) {
         array[i] = temp[i - start];
         barElements[i].style.height = array[i] * 100 + "%";
         barElements[i].style.background = "black";
-        await sleep(10);
+        await sleep(speedBars);
     }
 }
 

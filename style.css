@@ -98,10 +98,24 @@ body {
     font-weight: 600;
 }
 
+#barSpeed {
+    padding: 5px;
+    border-radius: 4px;
+    border-color: #4CAF50;
+}
+
+#barSpeed:focus {
+    outline: 2px solid #4CAF50;
+}
+
 #barCount {
     padding: 5px;
     border-radius: 4px;
     border-color: #4CAF50;
+}
+
+#barCount:focus {
+    outline: 2px solid #4CAF50;
 }
 
 .controls button {
